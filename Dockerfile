@@ -7,9 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # Update package lists and install necessary dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    python3-pip \
+RUN apt-get update && apt-get install python3 python3-pip -y\
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
