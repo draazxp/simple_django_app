@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'draazxp/simple_django_app:latest'
         EC2_USER = 'ubuntu'
-        EC2_HOST = '82.12.77.194'
+        EC2_HOST = '54.236.29.37'
         SSH_KEY = '/home/draazxp/Downloads/aws-login.pem'
     }
 
