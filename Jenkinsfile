@@ -14,7 +14,7 @@ pipeline {
                 git url: 'https://github.com/draazxp/simple_django_app.git', branch: 'main'
             }
         }
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
                 script {
                     dockerImage = docker.build(DOCKER_IMAGE)
@@ -32,8 +32,7 @@ pipeline {
             }
         }
         */
-        
-        stage('Push') {
+        stage('Push Docker Image') {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
@@ -45,8 +44,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    sh "scp -i ${SSH_KEY} -o StrictHostKeyChecking=no docker-compose.yml ${EC2_USER}@${EC2_HOST}:~/"
-                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker pull $DOCKER_IMAGE && docker-compose up -d'"
+                    // SSH into the EC2 instance and run the Docker container in interactive mode
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker pull $DOCKER_IMAGE && docker run -d -p 80:8000 -it $DOCKER_IMAGE'"
                 }
             }
         }
