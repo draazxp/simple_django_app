@@ -41,12 +41,23 @@ pipeline {
                 }
             }
         }
+        stage('Clear Workspace') {
+            steps {
+                script {
+                    // Stop all running containers
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker stop \$(docker ps -q)'"
+                    
+                    // Remove all stopped containers
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker rm \$(docker ps -aq)'"
+                    
+                    // Remove all Docker images
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker rmi \$(docker images -q)'"
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 script {
-                    // Stop and remove any existing container based on the same image
-                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker ps -q --filter ancestor=$DOCKER_IMAGE | xargs -r docker stop | xargs -r docker rm'"
-
                     // Pull the latest Docker image
                     sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker pull $DOCKER_IMAGE'"
 
