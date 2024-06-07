@@ -3,6 +3,9 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'draazxp/simple_django_app:latest'
+        EC2_USER = 'ubuntu'
+        EC2_HOST = '82.12.77.194'
+        SSH_KEY = '/home/draazxp/Downloads/aws-login.pem'
     }
 
     stages {
@@ -42,9 +45,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Add your deployment steps here
-                    // For example, SSH into the server and pull the new Docker image
-                    sh 'ssh user@yourserver "docker pull $DOCKER_IMAGE && docker-compose up -d"'
+                    sh "scp -i ${SSH_KEY} -o StrictHostKeyChecking=no docker-compose.yml ${EC2_USER}@${EC2_HOST}:~/"
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker pull $DOCKER_IMAGE && docker-compose up -d'"
                 }
             }
         }
