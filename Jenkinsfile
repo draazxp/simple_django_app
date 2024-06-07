@@ -45,7 +45,8 @@ pipeline {
             steps {
                 script {
                     // Stop all running containers
-                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker stop \$(docker ps -q)'"
+                    sh "ssh -i /opt/aws-login.pem -o StrictHostKeyChecking=no ubuntu@54.236.29.37 'docker ps -q --filter "status=running" | xargs -r docker stop'
+'"
                     
                     // Remove all stopped containers
                     sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker rm \$(docker ps -aq)'"
