@@ -44,8 +44,11 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // SSH into the EC2 instance and run the Docker container in interactive mode
-                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker pull $DOCKER_IMAGE && docker run -d -p 80:8000 -it $DOCKER_IMAGE'"
+                    // SSH into the EC2 instance and pull the latest Docker image
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker pull $DOCKER_IMAGE'"
+                    
+                    // Run the Docker container on the EC2 instance
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker run -it -p 80:8000 $DOCKER_IMAGE'"
                 }
             }
         }
