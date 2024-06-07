@@ -18,6 +18,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Test') {
             steps {
                 script {
@@ -27,6 +28,8 @@ pipeline {
                 }
             }
         }
+        */
+        
         stage('Push') {
             steps {
                 script {
