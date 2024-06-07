@@ -48,7 +48,7 @@ pipeline {
                     sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker pull $DOCKER_IMAGE'"
                     
                     // Run the Docker container on the EC2 instance
-                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker run -it -p 80:8000 $DOCKER_IMAGE'"
+                    sh "ssh -i ${SSH_KEY} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} 'docker run -d -p 80:8000 $DOCKER_IMAGE'"
                 }
             }
         }
