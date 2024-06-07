@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'your-dockerhub-username/django-app:latest'
+        DOCKER_IMAGE = 'draazxp/simple_django_app:latest'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/yourusername/yourrepository.git', branch: 'main'
+                git url: 'https://github.com/draazxp/simple_django_app.git', branch: 'main'
             }
         }
         stage('Build') {
